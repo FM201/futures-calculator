@@ -1,24 +1,43 @@
-<!DOCTYPE html>
+
+      
+      <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MintSizer - Futures Contract Calculator</title>
+  <title>FTSizing - Futures Contract Calculator</title>
   <style>
     body {
+      margin: 0;
       background-color: #0a0a0a;
-      color: #00ff99;
+      color: #00aaff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .background {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      background: url('https://cdn.jsdelivr.net/gh/danielgindi/candlestick-chart@master/demo/candles-dark.gif') center center / cover no-repeat;
+      opacity: 0.07;
+    }
+
+    .container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
       padding: 20px;
     }
+
     h1 {
       font-size: 2.5rem;
       margin-bottom: 20px;
     }
+
     input, button {
       width: 90%;
       max-width: 400px;
@@ -28,41 +47,46 @@
       border-radius: 10px;
       font-size: 1rem;
     }
+
     input {
       background-color: #1c1c1c;
-      color: #00ff99;
+      color: #00aaff;
     }
+
     button {
-      background-color: #00ff99;
+      background-color: #00aaff;
       color: #000;
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
     button:hover {
-      background-color: #00cc7a;
+      background-color: #0088cc;
     }
+
     #result {
       margin-top: 20px;
       font-size: 1.5rem;
       color: #ffffff;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
+  <div class="background"></div>
+  <div class="container">
+    <h1>FTSizing</h1>
 
-  <h1>MintSizer</h1>
+    <input type="number" id="stopLoss" placeholder="Stop Loss in Points">
+    <input type="number" id="risk" placeholder="Risk in USD">
+    <input type="text" id="symbol" placeholder="Symbol (e.g. ES, MNQ, MES)">
 
-  <input type="number" id="stopLoss" placeholder="Stop Loss in Points">
-  <input type="number" id="risk" placeholder="Risk in USD">
-  <input type="text" id="symbol" placeholder="Symbol (e.g. ES, MNQ, MES)">
-
-  <button onclick="calculateContracts()">Calculate</button>
-
-  <h2 id="result"></h2>
-
-  <script>
-    const tickValues = {
       'ES': 12.5,    // E-mini S&P 500
       'MES': 1.25,   // Micro E-mini S&P 500
       'NQ': 20,      // E-mini Nasdaq
