@@ -1,87 +1,97 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Futures Position Size Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MintSizer - Futures Contract Calculator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 50px auto;
+      background-color: #0a0a0a;
+      color: #00ff99;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 90%;
+      max-width: 400px;
+      padding: 15px;
+      margin: 10px;
+      border: none;
       border-radius: 10px;
-      background-color: #f3f3f3;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
     }
-    h2 {
-      text-align: center;
+    input {
+      background-color: #1c1c1c;
+      color: #00ff99;
     }
-    label {
-      display: block;
-      margin-top: 15px;
+    button {
+      background-color: #00ff99;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      font-size: 16px;
+    button:hover {
+      background-color: #00cc7a;
     }
     #result {
       margin-top: 20px;
-      font-size: 18px;
-      text-align: center;
-      color: green;
+      font-size: 1.5rem;
+      color: #ffffff;
     }
   </style>
 </head>
 <body>
-  <h2>Futures Contract Position Size Calculator</h2>
 
-  <label for="contract">Select Contract:</label>
-  <select id="contract">
-    <option value="MNQ">MNQ (Micro Nasdaq)</option>
-    <option value="NQ">NQ (Nasdaq)</option>
-    <option value="MES">MES (Micro S&P)</option>
-    <option value="ES">ES (S&P)</option>
-  </select>
+  <h1>MintSizer</h1>
 
-  <label for="risk">How much do you want to risk (in $)?:</label>
-  <input type="number" id="risk" placeholder="e.g. 100" />
+  <input type="number" id="stopLoss" placeholder="Stop Loss in Points">
+  <input type="number" id="risk" placeholder="Risk in USD">
+  <input type="text" id="symbol" placeholder="Symbol (e.g. ES, MNQ, MES)">
 
-  <label for="stopLoss">Stop Loss in Points:</label>
-  <input type="number" id="stopLoss" placeholder="e.g. 5" />
+  <button onclick="calculateContracts()">Calculate</button>
 
-  <button onclick="calculateContracts()">Calculate Contracts</button>
-
-  <div id="result"></div>
+  <h2 id="result"></h2>
 
   <script>
-    const futuresData = {
-      MNQ: 2.0,
-      NQ: 20.0,
-      MES: 5.0,
-      ES: 50.0
+    const tickValues = {
+      'ES': 12.5,    // E-mini S&P 500
+      'MES': 1.25,   // Micro E-mini S&P 500
+      'NQ': 20,      // E-mini Nasdaq
+      'MNQ': 2,      // Micro E-mini Nasdaq
+      'CL': 10,      // Crude Oil
+      'GC': 10       // Gold
     };
 
     function calculateContracts() {
-      const contract = document.getElementById("contract").value;
+      const stopLoss = parseFloat(document.getElementById("stopLoss").value);
       const risk = parseFloat(document.getElementById("risk").value);
-      const slPoints = parseFloat(document.getElementById("stopLoss").value);
-      const resultDiv = document.getElementById("result");
+      const symbol = document.getElementById("symbol").value.toUpperCase();
 
-      if (isNaN(risk) || isNaN(slPoints) || slPoints <= 0 || risk <= 0) {
-        resultDiv.innerHTML = "⚠️ Please enter valid numbers for risk and stop loss.";
-        resultDiv.style.color = "red";
+      const tickValue = tickValues[symbol];
+
+      if (!tickValue) {
+        document.getElementById("result").innerText = "Unknown symbol! Supported: ES, MES, NQ, MNQ, CL, GC";
         return;
       }
 
-      const valuePerPoint = futuresData[contract];
-      const riskPerContract = valuePerPoint * slPoints;
-      const contracts = Math.floor(risk / riskPerContract);
+      if (isNaN(stopLoss) || isNaN(risk) || stopLoss <= 0 || risk <= 0) {
+        document.getElementById("result").innerText = "Enter valid numbers.";
+        return;
+      }
 
-      resultDiv.style.color = "green";
-      resultDiv.innerHTML = `➡ You should trade <strong>${contracts}</strong> contract(s) of ${contract} to stay within $${risk.toFixed(2)} risk.`;
+      const contracts = Math.floor(risk / (stopLoss * tickValue));
+      document.getElementById("result").innerText = `Contracts: ${contracts}`;
     }
   </script>
+
 </body>
 </html>
