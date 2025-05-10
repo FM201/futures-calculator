@@ -1,156 +1,45 @@
-
-      
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futures Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apartments ZARA</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>Futures Calculator</h1>
-        <form id="calculator-form">
-            <div class="input-group">
-                <label for="stopLoss">Stop Loss in Points:</label>
-                <input type="number" id="stopLoss" required>
-            </div>
-            <div class="input-group">
-                <label for="risk">Risk in USD:</label>
-                <input type="number" id="risk" required>
-            </div>
-            <div class="input-group">
-                <label for="symbol">Symbol:</label>
-                <select id="symbol" required>
-                    <option value="MNQ">MNQ</option>
-                    <option value="NQ">NQ</option>
-                    <option value="ES">ES</option>
-                    <option value="Gold">Gold</option>
-                    <option value="Oil">Oil</option>
-                </select>
-            </div>
-            <button type="submit" class="calculate-btn">Calculate</button>
-        </form>
-        <div class="result">
-            <p>Contracts: <span id="contracts">0</span></p>
-        </div>
-    </div>
-    <script src="script.js"></script>
+  <header>
+    <h1>Apartments ZARA</h1>
+    <p>Komfortné ubytovanie v blízkosti VADAŠ Thermal Resort Štúrovo</p>
+  </header>
+
+  <section class="about">
+    <h2>O nás</h2>
+    <p>
+      Komfortné dvoj až štvorizbové apartmány, nadštandardné jednoizbové suity bez kuchynky s dvojlôžkom a vlastnou kúpeľňou,
+      nadštandardné štúdiá s kuchynkou a dvojlôžkom na prenájom v centre mesta a v tesnej blízkosti VADAŠ Thermal Resort Štúrovo.
+    </p>
+    <p><strong>Müllerová</strong></p>
+  </section>
+
+  <section class="gallery">
+    <h2>Fotogaléria</h2>
+    <img src="https://via.placeholder.com/300x200" alt="Apartmán" />
+    <img src="https://via.placeholder.com/300x200" alt="Interiér" />
+    <img src="https://via.placeholder.com/300x200" alt="Okolie" />
+  </section>
+
+  <section class="pricing">
+    <h2>Cenník</h2>
+    <p>Informácie o cenách poskytujeme emailom alebo telefonicky.</p>
+  </section>
+
+  <section class="contact">
+    <h2>Kontakt</h2>
+    <p>Napíšte nám na <a href="mailto:amstavmax@gmail.com">amstavmax@gmail.com</a></p>
+  </section>
+
+  <footer>
+    <p>© 2025 Apartments ZARA</p>
+  </footer>
 </body>
 </html>
-CSS (styles.css):
-css
-Copy
-Edit
-body {
-    background-color: #1a1a2e;
-    font-family: Arial, sans-serif;
-    color: white;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.container {
-    text-align: center;
-    background-color: #16213e;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-h1 {
-    color: #0a0a2a;
-}
-
-.input-group {
-    margin: 15px 0;
-}
-
-label {
-    font-size: 1.1rem;
-    margin-right: 10px;
-}
-
-input, select {
-    padding: 10px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    width: 200px;
-    margin-left: 10px;
-}
-
-button.calculate-btn {
-    background-color: #00bcd4;
-    border: none;
-    padding: 15px 25px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
-}
-
-button.calculate-btn:hover {
-    background-color: #0097a7;
-    transform: scale(1.05);
-}
-
-.result {
-    margin-top: 20px;
-    font-size: 1.5rem;
-}
-
-@media screen and (max-width: 600px) {
-    .input-group input, .input-group select {
-        width: 100%;
-    }
-}
-JavaScript (script.js):
-javascript
-Copy
-Edit
-document.getElementById('calculator-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const stopLoss = parseFloat(document.getElementById('stopLoss').value);
-    const risk = parseFloat(document.getElementById('risk').value);
-    const symbol = document.getElementById('symbol').value;
-    
-    const contractSize = calculateContractSize(symbol, stopLoss, risk);
-    document.getElementById('contracts').textContent = contractSize;
-});
-
-function calculateContractSize(symbol, stopLoss, risk) {
-    let tickValue;
-
-    // Define tick values for each symbol
-    switch (symbol) {
-        case 'MNQ':
-            tickValue = 5; // Example, adjust to real value
-            break;
-        case 'NQ':
-            tickValue = 20; // Example, adjust to real value
-            break;
-        case 'ES':
-            tickValue = 50; // Example, adjust to real value
-            break;
-        case 'Gold':
-            tickValue = 10; // Example, adjust to real value
-            break;
-        case 'Oil':
-            tickValue = 10; // Example, adjust to real value
-            break;
-        default:
-            tickValue = 1;
-            break;
-    }
-
-    // Formula to calculate contract size
-    return Math.round((risk / (stopLoss * tickValue)));
-}
